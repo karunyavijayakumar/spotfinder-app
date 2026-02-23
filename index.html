@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SpotFinder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to right, #e3f2fd, #fce4ec);
+        }
+
+        .header {
+            text-align: center;
+            padding: 25px;
+            font-size: 28px;
+            font-weight: bold;
+            background: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .cards {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+            padding: 40px;
+        }
+
+        .card {
+            width: 300px;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 15px;
+        }
+
+        .card h3 {
+            margin-bottom: 8px;
+        }
+
+        .btn {
+            margin-top: 10px;
+            display: inline-block;
+            padding: 8px 15px;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* Modal Styling */
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 60px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: auto;
+            padding: 20px;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 15px;
+        }
+
+        .close {
+            float: right;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        ul {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="header">
+    🌍 SpotFinder Tourism App
+</div>
+
+<div class="cards">
+
+    <div class="card">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg">
+        <div class="card-content">
+            <h3>Eiffel Tower</h3>
+            <div class="btn" onclick="openModal('eiffel')">View Details</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/1/12/Mount_Fuji_from_Yamanakako_2018.jpg">
+        <div class="card-content">
+            <h3>Mount Fuji</h3>
+            <div class="btn" onclick="openModal('fuji')">View Details</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Grand_Canyon_view_from_Pima_Point_2010.jpg">
+        <div class="card-content">
+            <h3>Grand Canyon</h3>
+            <div class="btn" onclick="openModal('canyon')">View Details</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a1/Statue_of_Liberty_7.jpg">
+        <div class="card-content">
+            <h3>Statue of Liberty</h3>
+            <div class="btn" onclick="openModal('liberty')">View Details</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/d/da/Taj-Mahal.jpg">
+        <div class="card-content">
+            <h3>Taj Mahal</h3>
+            <div class="btn" onclick="openModal('taj')">View Details</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle"></h2>
+        <p id="modalDescription"></p>
+        <h4>Nearby Attractions:</h4>
+        <ul id="modalList"></ul>
+    </div>
+</div>
+
+<script>
+    const data = {
+        eiffel: {
+            title: "Eiffel Tower",
+            desc: "Iconic landmark in Paris, France.",
+            nearby: ["Champ de Mars", "Seine River Cruise", "Rue Cler Market", "Pont d'Iéna", "Quai Branly Museum"]
+        },
+        fuji: {
+            title: "Mount Fuji",
+            desc: "Japan’s tallest and most famous mountain.",
+            nearby: ["Lake Kawaguchi", "Hakone", "Fuji-Q Highland", "Aokigahara Forest", "Arakurayama Park"]
+        },
+        canyon: {
+            title: "Grand Canyon",
+            desc: "Massive natural canyon in Arizona, USA.",
+            nearby: ["Skywalk", "Colorado River", "South Rim", "Desert View", "Helicopter Tours"]
+        },
+        liberty: {
+            title: "Statue of Liberty",
+            desc: "Symbol of freedom in New York.",
+            nearby: ["Ellis Island", "Battery Park", "Brooklyn Bridge", "Wall Street", "One World Trade Center"]
+        },
+        taj: {
+            title: "Taj Mahal",
+            desc: "Historic Mughal monument in India.",
+            nearby: ["Agra Fort", "Mehtab Bagh", "Jama Masjid", "Kinari Bazaar", "Itmad-ud-Daulah"]
+        }
+    };
+
+    function openModal(place) {
+        document.getElementById("modalTitle").innerText = data[place].title;
+        document.getElementById("modalDescription").innerText = data[place].desc;
+
+        const list = document.getElementById("modalList");
+        list.innerHTML = "";
+        data[place].nearby.forEach(item => {
+            let li = document.createElement("li");
+            li.innerText = item;
+            list.appendChild(li);
+        });
+
+        document.getElementById("modal").style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById("modal").style.display = "none";
+    }
+</script>
+
+</body>
+</html>
