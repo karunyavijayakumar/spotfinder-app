@@ -4,11 +4,7 @@
     <title>SpotFinder</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', sans-serif;
@@ -28,63 +24,49 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 25px;
+            gap: 20px;
             padding: 40px;
         }
 
         .card {
-            width: 300px;
+            width: 260px;
             background: white;
             border-radius: 15px;
-            overflow: hidden;
+            padding: 20px;
+            text-align: center;
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
             transition: 0.3s;
         }
 
         .card:hover {
-            transform: translateY(-10px);
-        }
-
-        .card img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-        }
-
-        .card-content {
-            padding: 15px;
+            transform: translateY(-8px);
         }
 
         .card h3 {
-            margin-bottom: 8px;
+            margin-bottom: 15px;
+            font-size: 18px;
         }
 
         .btn {
-            margin-top: 10px;
-            display: inline-block;
             padding: 8px 15px;
             background: linear-gradient(to right, #6a11cb, #2575fc);
             color: white;
             border-radius: 8px;
             cursor: pointer;
+            display: inline-block;
         }
-
-        /* Modal Styling */
 
         .modal {
             display: none;
             position: fixed;
-            z-index: 1;
             padding-top: 60px;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
             background-color: rgba(0,0,0,0.5);
         }
 
         .modal-content {
-            background-color: white;
+            background: white;
             margin: auto;
             padding: 20px;
             width: 80%;
@@ -103,63 +85,15 @@
             padding-left: 20px;
         }
 
-        li {
-            margin-bottom: 8px;
-        }
-
+        li { margin-bottom: 6px; }
     </style>
 </head>
 <body>
 
-<div class="header">
-    SPOT FINDER
-</div>
+<div class="header">🌍 SPOT FINDER</div>
 
-<div class="cards">
+<div class="cards" id="cardsContainer"></div>
 
-    <div class="card">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg">
-        <div class="card-content">
-            <h3>Eiffel Tower</h3>
-            <div class="btn" onclick="openModal('eiffel')">View Details</div>
-        </div>
-    </div>
-
-    <div class="card">
-        <img src="https://commons.wikimedia.org/wiki/File:Mount_Fuji_at_sunset,_March_2025.jpg">
-        <div class="card-content">
-            <h3>Mount Fuji</h3>
-            <div class="btn" onclick="openModal('fuji')">View Details</div>
-        </div>
-    </div>
-
-    <div class="card">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Grand_Canyon_view_from_Pima_Point_2010.jpg">
-        <div class="card-content">
-            <h3>Grand Canyon</h3>
-            <div class="btn" onclick="openModal('canyon')">View Details</div>
-        </div>
-    </div>
-
-    <div class="card">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a1/Statue_of_Liberty_7.jpg">
-        <div class="card-content">
-            <h3>Statue of Liberty</h3>
-            <div class="btn" onclick="openModal('liberty')">View Details</div>
-        </div>
-    </div>
-
-    <div class="card">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/d/da/Taj-Mahal.jpg">
-        <div class="card-content">
-            <h3>Taj Mahal</h3>
-            <div class="btn" onclick="openModal('taj')">View Details</div>
-        </div>
-    </div>
-
-</div>
-
-<!-- Modal -->
 <div id="modal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
@@ -171,55 +105,110 @@
 </div>
 
 <script>
-    const data = {
-        eiffel: {
-            title: "Eiffel Tower",
-            desc: "Iconic landmark in Paris, France.",
-            nearby: ["Champ de Mars", "Seine River Cruise", "Rue Cler Market", "Pont d'Iéna", "Quai Branly Museum"]
-        },
-        fuji: {
-            title: "Mount Fuji",
-            desc: "Japan’s tallest and most famous mountain.",
-            nearby: ["Lake Kawaguchi", "Hakone", "Fuji-Q Highland", "Aokigahara Forest", "Arakurayama Park"]
-        },
-        canyon: {
-            title: "Grand Canyon",
-            desc: "Massive natural canyon in Arizona, USA.",
-            nearby: ["Skywalk", "Colorado River", "South Rim", "Desert View", "Helicopter Tours"]
-        },
-        liberty: {
-            title: "Statue of Liberty",
-            desc: "Symbol of freedom in New York.",
-            nearby: ["Ellis Island", "Battery Park", "Brooklyn Bridge", "Wall Street", "One World Trade Center"]
-        },
-        taj: {
-            title: "Taj Mahal",
-            desc: "Historic Mughal monument in India.",
-            nearby: ["Agra Fort", "Mehtab Bagh", "Jama Masjid", "Kinari Bazaar", "Itmad-ud-Daulah"]
-        }
-    };
 
-    function openModal(place) {
-        document.getElementById("modalTitle").innerText = data[place].title;
-        document.getElementById("modalDescription").innerText = data[place].desc;
+const data = {
 
-        const list = document.getElementById("modalList");
-        list.innerHTML = "";
-        data[place].nearby.forEach(item => {
-            let li = document.createElement("li");
-            li.innerText = item;
-            list.appendChild(li);
-        });
+    // Previous Places
+    eiffel: {
+        title: "Eiffel Tower",
+        desc: "Iconic landmark in Paris, France.",
+        nearby: ["Louvre Museum", "Seine River Cruise", "Arc de Triomphe", "Montmartre", "Notre Dame Cathedral"]
+    },
 
-        document.getElementById("modal").style.display = "block";
+    fuji: {
+        title: "Mount Fuji",
+        desc: "Japan’s tallest and most famous mountain.",
+        nearby: ["Lake Kawaguchi", "Hakone", "Fuji-Q Highland", "Aokigahara Forest", "Arakurayama Park"]
+    },
+
+    canyon: {
+        title: "Grand Canyon",
+        desc: "Massive natural canyon in Arizona, USA.",
+        nearby: ["Skywalk", "Colorado River", "South Rim", "Desert View", "Helicopter Tours"]
+    },
+
+    liberty: {
+        title: "Statue of Liberty",
+        desc: "Symbol of freedom in New York.",
+        nearby: ["Ellis Island", "Battery Park", "Brooklyn Bridge", "Wall Street", "One World Trade Center"]
+    },
+
+    // 7 Wonders
+
+    taj: {
+        title: "Taj Mahal",
+        desc: "White marble Mughal monument in Agra, India.",
+        nearby: ["Agra Fort", "Mehtab Bagh", "Jama Masjid", "Fatehpur Sikri", "Itmad-ud-Daulah"]
+    },
+
+    wall: {
+        title: "Great Wall of China",
+        desc: "Ancient wall stretching thousands of kilometers in China.",
+        nearby: ["Badaling Section", "Mutianyu", "Ming Tombs", "Juyongguan Pass", "Beijing City"]
+    },
+
+    petra: {
+        title: "Petra",
+        desc: "Ancient rock-cut city in Jordan.",
+        nearby: ["Al-Khazneh", "Monastery", "Siq Canyon", "Royal Tombs", "Wadi Rum"]
+    },
+
+    colosseum: {
+        title: "Colosseum",
+        desc: "Ancient Roman amphitheater in Italy.",
+        nearby: ["Roman Forum", "Palatine Hill", "Trevi Fountain", "Pantheon", "Vatican City"]
+    },
+
+    christ: {
+        title: "Christ the Redeemer",
+        desc: "Massive statue overlooking Rio de Janeiro, Brazil.",
+        nearby: ["Sugarloaf Mountain", "Copacabana Beach", "Ipanema Beach", "Maracanã Stadium", "Tijuca Forest"]
+    },
+
+    machu: {
+        title: "Machu Picchu",
+        desc: "Ancient Incan city in Peru.",
+        nearby: ["Huayna Picchu", "Sacred Valley", "Cusco", "Inca Trail", "Sun Gate"]
+    },
+
+    chichen: {
+        title: "Chichen Itza",
+        desc: "Mayan archaeological site in Mexico.",
+        nearby: ["Cenote Ik Kil", "El Castillo Pyramid", "Temple of Warriors", "Tulum", "Valladolid"]
     }
+};
 
-    function closeModal() {
-        document.getElementById("modal").style.display = "none";
-    }
+const container = document.getElementById("cardsContainer");
+
+for (let key in data) {
+    container.innerHTML += `
+        <div class="card">
+            <h3>${data[key].title}</h3>
+            <div class="btn" onclick="openModal('${key}')">View Details</div>
+        </div>
+    `;
+}
+
+function openModal(place) {
+    document.getElementById("modalTitle").innerText = data[place].title;
+    document.getElementById("modalDescription").innerText = data[place].desc;
+
+    const list = document.getElementById("modalList");
+    list.innerHTML = "";
+    data[place].nearby.forEach(item => {
+        let li = document.createElement("li");
+        li.innerText = item;
+        list.appendChild(li);
+    });
+
+    document.getElementById("modal").style.display = "block";
+}
+
+function closeModal() {
+    document.getElementById("modal").style.display = "none";
+}
+
 </script>
 
 </body>
-
 </html>
-
