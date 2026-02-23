@@ -30,6 +30,50 @@
             background: white;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
+        .navbar {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .logo span {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links a {
+            margin-left: 25px;
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #ffeb3b;
+        }
 
         .cards {
             display: flex;
@@ -101,7 +145,17 @@
 </head>
 <body>
 
-<div class="header">🌍 SPOT FINDER</div>
+<div class="navbar">
+    <div class="logo">
+        <img src="your-logo.png" class="logo-img">
+        <span>SpotFinder</span>
+    </div>
+    <div class="nav-links">
+        <a href="#">Home</a>
+        <a href="#">Explore</a>
+        <a href="#">Contact</a>
+    </div>
+</div>
 
 <div class="cards" id="cardsContainer"></div>
 
@@ -223,4 +277,5 @@ function closeModal() {
 
 </body>
 </html>
+
 
